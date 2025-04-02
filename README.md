@@ -55,9 +55,10 @@ Envia notificações em caso de erro.
    
    `pip install -r requirements.txt`
 
-Crie um arquivo .env na raiz do projeto e configure as URLs do sistema:
+5. Crie um arquivo .env na raiz do projeto e configure as URLs do sistema:
    
-   ```URL_CHAT_TEST=https://seu-webhook-de-notificacao.com
+   ```
+   URL_CHAT_TEST=https://seu-webhook-de-notificacao.com
    
    URL_CHAT_PROD=https://seu-webhook-de-notificacao.com
    
