@@ -1,4 +1,4 @@
-# 🏠❄️Automação de Ar-Condicionado com Selenium
+# 🏫❄️Automação de Ar-Condicionado com Selenium
 
 ## 📌Descrição
 
@@ -12,7 +12,7 @@ Seleciona os ambientes a serem controlados.
 
 Ativa ou desativa o ar-condicionado conforme o horário.
 
-Registra logs de operacoes realizadas.
+Registra logs de operações realizadas.
 
 Envia notificações em caso de erro.
 
@@ -34,11 +34,11 @@ Envia notificações em caso de erro.
 
 ## 📥Instalação
 
-1. Clone este repositorio:
+1. Clone este repositório:
    
    `git clone https://github.com/seu-usuario/seu-repositorio.git`
 
-2. Acesse o diretorio do projeto:
+2. Acesse o diretório do projeto:
    
    `cd seu-repositorio`
 
@@ -48,7 +48,7 @@ Envia notificações em caso de erro.
    python -m venv venv
    source venv/bin/activate  # Linux/Mac
    venv\Scripts\activate  # Windows
-```
+   ```
 
 
 4. Instale as dependências:
@@ -95,17 +95,15 @@ Crie um arquivo .env na raiz do projeto e configure as URLs do sistema:
 
 ## 📂Estrutura do Código
 
-- O sistema utiliza webdriver_manager para gerenciar o WebDriver.
-
 - As operações de clique são realizadas por driver.find_element(By.XPATH, elemento).click().
 
 - Os logs são armazenados em arquivos específicos dependendo do horário de execução.
 
 - O script termina a execução fechando o navegador com driver.quit().
 
-## ❓Possiveis Problemas e Solucoes
+## ❓Possíveis Problemas e Soluções
 
-- Erro ao acessar o WebDriver: Verifique se o chromedriver esta instalado e configurado corretamente.
+- Erro ao acessar o WebDriver: Verifique se o chromedriver esta instalado, configurado corretamente e a versão é a mesma do Chrome.
 
 - Elemento não encontrado: Certifique-se de que a estrutura da pagina web não foi alterada.
 
