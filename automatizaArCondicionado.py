@@ -58,10 +58,12 @@ def clicar_elemento(elemento):
             elemento = 'Turn Off'
         elif elemento == "//td[@onclick='sel_room(3)']":
             elemento = 'Sala de aula'
+        elif elemento == "//td[@onclick='sel_room(3)']":
+            elemento = 'Administração'
         elif elemento == '//*[@id="ac_2"]':
             elemento = 'Sala TI'
         else:
-            elemento = 'Administração'
+            elemento = 'Outros'
         
         print(f'Cliquei no elemento {elemento}')
         logging.info(f'Cliquei no elemento {elemento}')
@@ -84,7 +86,7 @@ try:
     time.sleep(2)
     relatorio = driver.find_element(By.ID, 'msg').text
     status = relatorio.replace("OFF","DESLIGADO").replace("COOL","LIGADO")
-    logging.info('\n'+'________________________________________________'+'\n'+status)
+    logging.info('\n'+status)
 
 except WebDriverException as erro:
     mensagem_erro = 'Erro ao acessar o sistema do ar condicionado, verifique a conexão com a internet'
@@ -101,13 +103,14 @@ todos = "//td[@onclick='javascript:operate(1);']" # All-Ctrl
 
 grupos = []
 
-# Adiciona administracao se estiver dentro do horário especificado
-if hora_inicio <= hora_atual <= hora_fim:
-    grupos.append(todos)
-    logging.info(f'Horário atual: {hora_atual.strftime("%H:%M")} - Adicionando administração à lista de grupos')
+# Adiciona no grupo de acordo com 
+if hora_inicio <= hora_atual <= hora_fim: #17:30
+    grupos.append(todos) # todos para Ala-A
+elif hora_atual == datetime.strptime('11:50', '%H:%M').time():
+    grupos.append(sala_de_aula)
 else:
-    grupos.append(sala_de_aula, administracao)
-    logging.info(f'Horário atual: {hora_atual.strftime("%H:%M")} - Operando apenas sala de aula')
+    grupos.append(sala_de_aula)
+    grupos.append(administracao)
 
 
 for grupo in grupos:
@@ -119,5 +122,6 @@ for grupo in grupos:
     clicar_elemento('//*[@id="set"]/table/tbody/tr[2]/td/table/tbody/tr[14]/td/table/tbody/tr/td[3]')
 
 driver.quit()
+logging.info('\n'+'________________________________________________'+'\n')
 print('Finalizado')
 exit()
