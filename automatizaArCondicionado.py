@@ -17,11 +17,6 @@ load_dotenv()
 url = os.getenv("URL_CHAT_TEST")  # ambiente de teste
 #url = os.getenv("URL_CHAT_PROD") #ambiente de produção
 
-# Para verificar a versão do Chrome digite no terminal
-# google-chrome --version
-# Para baixar a versão do chromedriver acesse:
-# https://googlechromelabs.github.io/chrome-for-testing/known-good-versions-with-downloads.json
-
 driver_options = webdriver.ChromeOptions()
 driver_options.add_argument('--headless') # Não abre a janela do navegador
 driver_options.add_argument('--no-sandbox')
