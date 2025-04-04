@@ -110,7 +110,6 @@ else:
     grupos.append(sala_de_aula)
     grupos.append(administracao)
 
-
 for grupo in grupos:
 
     # Clica no ar condicionado
