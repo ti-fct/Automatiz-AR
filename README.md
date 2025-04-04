@@ -1,111 +1,119 @@
-# 🏫❄️Automação de Ar-Condicionado com Selenium
+# 🏫❄️ Automação de Ar-Condicionado com Selenium
 
-## 📌Descrição
+## 📌 Descrição
+O sistema de automação de ar condicionado desenvolvido para a Faculdade de Ciências e Tecnologia da Universidade Federal de Goiás (FCT/UFG) visa otimizar o uso energético dos aparelhos de ar condicionado através de um controle efetivo e inteligente. Este projeto se destaca como pioneiro na aplicação de tecnologia de automação em climas controlados na UFG, proporcionando um modelo que pode ser replicado em outros edifícios da universidade.
 
-Este sistema automatiza o controle de ar-condicionado em diferentes salas da Faculdade de Ciência e Tecnologia, utilizando a biblioteca Selenium para interagir com uma interface web. O sistema verifica o horário atual e, com base nisso, liga ou desliga os aparelhos conforme regras predefinidas.
+### Objetivo
+O principal objetivo deste sistema é implementar ações de eficiência energética que garantam um controle eficaz do funcionamento dos aparelhos de ar condicionado instalados na FCT.
 
 O script realiza as seguintes operações:
 
-Acessa a interface web de controle do ar-condicionado.
+* Acessa a interface web de controle do ar-condicionado.
+* Seleciona os ambientes a serem controlados.
+* Ativa ou desativa o ar-condicionado conforme o horário.
+* Registra logs das operações realizadas.
+* Envia notificações em caso de erro.
 
-Seleciona os ambientes a serem controlados.
+## 🛠️ Tecnologias Utilizadas
 
-Ativa ou desativa o ar-condicionado conforme o horário.
+* Python 3
+* Selenium
+* WebDriver Manager
+* Dotenv
+* Requests
+* Logging
+* Cron
 
-Registra logs de operações realizadas.
+## 📥 Instalação
 
-Envia notificações em caso de erro.
+1.  Clone este repositório:
 
-## 🛠️Tecnologias Utilizadas
+    ```bash
+    git clone https://github.com/ti-fct/Automatiz-AR.git
+    ```
 
-- Python 3
+2.  Acesse o diretório do projeto:
 
-- Selenium
+    ```bash
+    cd seu-repositorio
+    ```
 
-- WebDriver Manager
+3.  Crie um ambiente virtual e ative-o (opcional):
 
-- Dotenv
+    ```bash
+    python -m venv venv
+    source venv/bin/activate   # Linux/Mac
+    venv\Scripts\activate      # Windows
+    ```
 
-- Requests
+4.  Instale as dependências:
 
-- Logging
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-- Cron
+5.  Crie um arquivo `.env` na raiz do projeto e configure as URLs do sistema:
 
-## 📥Instalação
+    ```env
+    URL_CHAT_TEST=https://seu-webhook-de-notificacao.com
 
-1. Clone este repositório:
-   
-   `git clone https://github.com/seu-usuario/seu-repositorio.git`
+    URL_CHAT_PROD=https://seu-webhook-de-notificacao.com
 
-2. Acesse o diretório do projeto:
-   
-   `cd seu-repositorio`
+    ALA_A=https://sistema-ala-a.com
 
-4. Crie um ambiente virtual e ative-o (opcional):
-   
-   ```
-   python -m venv venv
-   source venv/bin/activate  # Linux/Mac
-   venv\Scripts\activate  # Windows
-   ```
+    ALA_B=https://sistema-ala-b.com
+    ```
 
+## 🚀 Como Usar
 
-4. Instale as dependências:
-   
-   `pip install -r requirements.txt`
+1.  Certifique-se de que o WebDriver do Chrome está instalado e configurado corretamente. Também é importante verificar a versão instalada do Google Chrome. Digite o comando no terminal:
 
-5. Crie um arquivo .env na raiz do projeto e configure as URLs do sistema:
-   
-   ```
-   URL_CHAT_TEST=https://seu-webhook-de-notificacao.com
-   
-   URL_CHAT_PROD=https://seu-webhook-de-notificacao.com
-   
-   ALA_A=https://sistema-ala-a.com
-   
-   ALA_B=https://sistema-ala-b.com
-   ```
+    ```bash
+    google-chrome --version
+    ```
 
-## 🚀Como Usar
+2.  Acesse o site https://googlechromelabs.github.io/chrome-for-testing/known-good-versions-with-downloads.json e procure o ChromeDriver compatível com a versão do seu Google Chrome.
 
-1. Certifique-se de que o WebDriver do Chrome esta instalado e configurado corretamente.
+3.  Execute o script Python:
 
-2. Execute o script Python:
-   
-   `python3 automacao_ar_condicionado.py`
+    ```bash
+    python3 automacao_ar_condicionado.py
+    ```
 
-3. O script ira rodar automaticamente de acordo com os horários predefinidos, registrando logs e enviando notificações em caso de erro.
+4.  O script irá rodar automaticamente de acordo com os horários predefinidos, registrando logs e enviando notificações no Google Chat em caso de erro.
 
-## ⏲️ Execução Automatica com Cron
+## ⏲️ Execução Automática com Cron
 
-1. Abra o crontab
-   
-   `crontab -e`
-   
-2.  Adicione a seguinte linha de código:
-   
-   ```
-   50 11  * * *  root python3 /home/suporte/projeto/automatizaArCondicionado_ala-B.py
-   
-   30 17  * * *  root python3 /home/suporte/projeto/automatizaArCondicionado_ala-A.py
-   
-   00 18  * * *  root python3 /home/suporte/projeto/automatizaArCondicionado_ala-B.py
-```
-   
+O sistema será executado às 11:50 nas salas de aula, quando inicia o intervalo para o almoço. Às 17:30 desligará os ares da Ala A e às 18h desligará o grupo Sala de Aulas e Administração. É importante ressaltar que o ar da sala da Microscopia não pode ser desligado.
 
-## 📂Estrutura do Código
+1.  Abra o crontab:
 
-- As operações de clique são realizadas por driver.find_element(By.XPATH, elemento).click().
+    ```bash
+    crontab -e
+    ```
 
-- Os logs são armazenados em arquivos específicos dependendo do horário de execução.
+2.  Adicione as seguintes linhas de código:
 
-- O script termina a execução fechando o navegador com driver.quit().
+    ```cron
+    50 11 * * * root python3 /home/suporte/projeto/automatizaArCondicionado.py
+    30 17 * * * root python3 /home/suporte/projeto/automatizaArCondicionado.py
+    00 18 * * * root python3 /home/suporte/projeto/automatizaArCondicionado.py
+    ```
 
-## ❓Possíveis Problemas e Soluções
+3. Reinicie o Cron:
 
-- Erro ao acessar o WebDriver: Verifique se o chromedriver esta instalado, configurado corretamente e a versão é a mesma do Chrome.
+    ```bash
+    sudo service cron reload
+    ```
 
-- Elemento não encontrado: Certifique-se de que a estrutura da pagina web não foi alterada.
+## 📂 Estrutura do Código
 
-- Erro de conexão: Verifique sua conexão com a internet e as URLs configuradas no .env.
+* As operações de clique são realizadas por `driver.find_element(By.XPATH, elemento).click()`.
+* Os logs são armazenados em arquivos específicos, dependendo do horário de execução.
+* O script finaliza a execução fechando o navegador com `driver.quit()`.
+
+## ❓ Possíveis Problemas e Soluções
+
+* **Erro ao acessar o WebDriver:** Verifique se o ChromeDriver está instalado, configurado corretamente e se a versão é a mesma do Chrome.
+* **Elemento não encontrado:** Certifique-se de que a estrutura da página web não foi alterada.
+* **Erro de conexão:** Verifique sua conexão com a internet e as URLs configuradas no arquivo `.env`.
