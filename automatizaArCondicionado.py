@@ -97,14 +97,15 @@ except WebDriverException as erro:
 
 sala_de_aula = "//td[@onclick='sel_room(2)']"
 administracao = "//td[@onclick='sel_room(3)']"
-todos = "//td[@onclick='javascript:operate(1);']" # All-Ctrl
+allCtrl = "//td[@onclick='javascript:operate(1);']"
 allOff = '//*[@id="tbl"]/table/tbody/tr[2]/td/table[1]/tbody/tr/td[2]' #botão all-Off que desliga todo o grupo
+turnOff = '//*[@id="set"]/table/tbody/tr[2]/td/table/tbody/tr[14]/td/table/tbody/tr/td[3]' #botão Turn Off que desliga o ar condicionado
 
 grupos = []
 
 # Adiciona administracao se estiver dentro do horário especificado
 if hora_inicio <= hora_atual <= hora_fim:
-    grupos.append(todos)
+    grupos.append(allOff)
     logging.info(f'Horário atual: {hora_atual.strftime("%H:%M")} - Adicionando administração à lista de grupos')
 else:
     grupos.append(sala_de_aula)
@@ -115,8 +116,11 @@ for grupo in grupos:
     # Clica no ar condicionado
     clicar_elemento(grupo)
 
+    # Clica no All-Ctrl
+    clicar_elemento(allCtrl)
+    
     # Clica no Turn Off
-    clicar_elemento('//*[@id="set"]/table/tbody/tr[2]/td/table/tbody/tr[14]/td/table/tbody/tr/td[3]')
+    clicar_elemento(turnOff)
 
 driver.quit()
 logging.info('\n'+'________________________________________________'+'\n')
