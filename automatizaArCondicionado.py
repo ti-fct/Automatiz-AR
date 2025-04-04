@@ -1,5 +1,5 @@
 from selenium import webdriver
-from selenium.common.exceptions import WebDriverException, NoSuchElementException, TimeoutException
+from selenium.common.exceptions import WebDriverException, NoSuchElementException, TimeoutException, ElementNotInteractableException
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
@@ -12,10 +12,6 @@ import time
 import os
 
 urllib3.disable_warnings()
-
-headers = {
-    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.6998.165 Safari/537.36'
-}
 
 load_dotenv()
 url = os.getenv("URL_CHAT_TEST")  # ambiente de teste
@@ -56,18 +52,30 @@ def clicar_elemento(elemento):
             elemento = 'All-Ctrl'
         elif elemento == '//*[@id="set"]/table/tbody/tr[2]/td/table/tbody/tr[14]/td/table/tbody/tr/td[3]':
             elemento = 'Turn Off'
-        elif elemento == "//td[@onclick='sel_room(3)']":
+        elif elemento == "//td[@onclick='sel_room(2)']":
             elemento = 'Sala de aula'
+        elif elemento == "//td[@onclick='sel_room(3)']":
+            elemento = 'Administração'
+        elif elemento == '//*[@id="tbl"]/table/tbody/tr[2]/td/table[1]/tbody/tr/td[2]':
+            elemento = 'All-Off'
         elif elemento == '//*[@id="ac_2"]':
             elemento = 'Sala TI'
         else:
-            elemento = 'Administração'
+            elemento = 'Outros'
         
         print(f'Cliquei no elemento {elemento}')
         logging.info(f'Cliquei no elemento {elemento}')
 
     except NoSuchElementException as erro:
         mensagem_erro = f'Não encontrei o elemento {elemento}'
+        print(str(datetime.now()) + mensagem_erro, erro)
+        logging.error(mensagem_erro, exc_info=True)
+        enviar_mensagem_erro(mensagem_erro)
+        driver.quit()
+        exit()
+
+    except ElementNotInteractableException as erro:
+        mensagem_erro = f'O Elemento não é interativo: {elemento}'
         print(str(datetime.now()) + mensagem_erro, erro)
         logging.error(mensagem_erro, exc_info=True)
         enviar_mensagem_erro(mensagem_erro)
@@ -97,17 +105,18 @@ except WebDriverException as erro:
 sala_de_aula = "//td[@onclick='sel_room(2)']"
 administracao = "//td[@onclick='sel_room(3)']"
 todos = "//td[@onclick='javascript:operate(1);']" # All-Ctrl
-#sala_ti = '//*[@id="ac_2"]' # para testes Ala B
+allOff = '//*[@id="tbl"]/table/tbody/tr[2]/td/table[1]/tbody/tr/td[2]' #botão all-Off que desliga todo o grupo
 
 grupos = []
 
-# Adiciona administracao se estiver dentro do horário especificado
-if hora_inicio <= hora_atual <= hora_fim:
-    grupos.append(todos)
-    logging.info(f'Horário atual: {hora_atual.strftime("%H:%M")} - Adicionando administração à lista de grupos')
+# Adiciona ao grupo se estiver dentro do horário especificado
+if hora_inicio <= hora_atual <= hora_fim: #17:30, acessa somente Ala A, então
+    clicar_elemento(allOff) # Desliga todos os ar condicionados
+elif hora_atual == datetime.strptime('11:50', '%H:%M').time():
+    grupos.append(sala_de_aula)
 else:
-    grupos.append(sala_de_aula, administracao)
-    logging.info(f'Horário atual: {hora_atual.strftime("%H:%M")} - Operando apenas sala de aula')
+    grupos.append(sala_de_aula)
+    grupos.append(administracao)
 
 
 for grupo in grupos:
@@ -119,5 +128,6 @@ for grupo in grupos:
     clicar_elemento('//*[@id="set"]/table/tbody/tr[2]/td/table/tbody/tr[14]/td/table/tbody/tr/td[3]')
 
 driver.quit()
+logging.info('\n'+'________________________________________________'+'\n')
 print('Finalizado')
 exit()
