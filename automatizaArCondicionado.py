@@ -103,10 +103,12 @@ turnOff = '//*[@id="set"]/table/tbody/tr[2]/td/table/tbody/tr[14]/td/table/tbody
 
 grupos = []
 
-# Adiciona administracao se estiver dentro do horário especificado
-if hora_inicio <= hora_atual <= hora_fim:
-    grupos.append(allOff)
-    logging.info(f'Horário atual: {hora_atual.strftime("%H:%M")} - Adicionando administração à lista de grupos')
+# Adiciona no grupo de acordo com 
+if hora_inicio <= hora_atual <= hora_fim: #17:30
+    clicar_elemento(allOff)
+#elif hora_atual == datetime.strptime('11:50', '%H:%M').time():
+elif hora_atual.hour == 11 and hora_atual.minute == 50: #11:50
+    grupos.append(sala_de_aula)
 else:
     grupos.append(sala_de_aula)
     grupos.append(administracao)
