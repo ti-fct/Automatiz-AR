@@ -22,7 +22,20 @@ driver_options.add_argument('--headless') # Não abre a janela do navegador
 driver_options.add_argument('--no-sandbox')
 driver_options.add_argument('--disable-dev-shm-usage') # Desativa o uso do sistema de arquivos de memória compartilhada
 service = ChromeService('/home/suporte/projeto/chromedriver-linux64/chromedriver')
-driver = webdriver.Chrome(service=service, options=driver_options)
+
+def enviar_mensagem_erro(mensagem):
+    json_erro = {'text': mensagem}
+    requests.post(url=url, json=json_erro, stream=True, verify=False)
+
+# Verifica se o ChromeDriver está instalado
+try:
+    driver = webdriver.Chrome(service=service, options=driver_options)
+except WebDriverException as erro:
+    mensagem_erro = 'Erro ao iniciar o ChromeDriver, verifique a versão do Chrome e do ChromeDriver'
+    print(str(datetime.now()) + mensagem_erro, erro)
+    logging.error(mensagem_erro, exc_info=True)
+    enviar_mensagem_erro(mensagem_erro)
+    exit()
 
 hora_atual = datetime.now().time()
 hora_inicio = datetime.strptime('17:25', '%H:%M').time()
@@ -32,10 +45,6 @@ if hora_inicio <= hora_atual <= hora_fim:
     logging.basicConfig(filename='/home/suporte/projeto/log_ar_condicionado_ala-A.txt', format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
 else:
     logging.basicConfig(filename='/home/suporte/projeto/log_ar_condicionado_ala-B.txt', format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
-
-def enviar_mensagem_erro(mensagem):
-    json_erro = {'text': mensagem}
-    requests.post(url=url, json=json_erro, stream=True, verify=False)
 
 def clicar_elemento(elemento):
     try:
